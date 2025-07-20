@@ -1,0 +1,75 @@
+{
+  "name": "PyO3 Development Environment",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.13.3",
+      "installTools": true,
+      "installJupyterlab": false,
+      "configureGitAliasOh": true
+    },
+    "ghcr.io/devcontainers/features/rust:1": {
+      "version": "latest",
+      "profile": "default",
+      "targets": "x86_64-unknown-linux-gnu,aarch64-unknown-linux-gnu,wasm32-unknown-emscripten,wasm32-wasip1,powerpc64le-unknown-linux-gnu,s390x-unknown-linux-gnu"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rust-lang.rust-analyzer",
+        "ms-python.python",
+        "ms-python.flake8",
+        "charliermarsh.ruff",
+        "tamasfe.even-better-toml",
+        "vadimcn.vscode-lldb",
+        "serayuzgur.crates",
+        "GitHub.copilot",
+        "GitHub.vscode-github-actions",
+        "ms-vscode.vscode-json"
+      ],
+      "settings": {
+        "rust-analyzer.cargo.features": "all",
+        "rust-analyzer.checkOnSave.command": "clippy",
+        "rust-analyzer.checkOnSave.allTargets": false,
+        "python.defaultInterpreterPath": "/usr/local/python/current/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.ruffEnabled": true,
+        "python.formatting.provider": "black",
+        "[rust]": {
+          "editor.formatOnSave": true,
+          "editor.defaultFormatter": "rust-lang.rust-analyzer"
+        },
+        "[python]": {
+          "editor.formatOnSave": true,
+          "editor.defaultFormatter": "charliermarsh.ruff"
+        }
+      }
+    }
+  },
+
+  "containerEnv": {
+    "CARGO_TERM_COLOR": "always",
+    "RUST_BACKTRACE": "1",
+    "PYO3_PYTHON": "/usr/local/python/current/bin/python"
+  },
+
+  "runArgs": [
+    "--init"
+  ],
+
+  "mounts": [
+    "source=${localWorkspaceFolder}/.devcontainer/cache/cargo-registry,target=/usr/local/cargo/registry,type=bind",
+    "source=${localWorkspaceFolder}/.devcontainer/cache/cargo-git,target=/usr/local/cargo/git,type=bind",
+    "source=${localWorkspaceFolder}/.devcontainer/cache/target,target=${containerWorkspaceFolder}/target,type=bind"
+  ],
+
+  "postCreateCommand": ".devcontainer/setup.sh",
+
+  "remoteUser": "vscode"
+}
